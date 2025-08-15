@@ -11,18 +11,20 @@ import { GoogleGenAI } from '@google/genai';
 import 'dotenv/config'; // Loads environment variables from a .env file
 
 // --- Initialization & Safety Check ---
-// IMPORTANT: You need to create a .env file with your API keys.
-if (!process.env.TELEGRAM_BOT_TOKEN) {
-  console.error("ERROR: TELEGRAM_BOT_TOKEN is not defined. Please create a .env file and add it.");
-  (process as any).exit(1);
+const telegramBotToken = process.env.TELEGRAM_BOT_TOKEN;
+const apiKey = process.env.API_KEY;
+
+if (!telegramBotToken) {
+  console.error("ERROR: TELEGRAM_BOT_TOKEN is not defined in your environment variables.");
+  process.exit(1);
 }
-if (!process.env.API_KEY) {
-  console.error("ERROR: API_KEY is not defined. Please create a .env file and add it.");
-  (process as any).exit(1);
+if (!apiKey) {
+  console.error("ERROR: API_KEY is not defined in your environment variables.");
+  process.exit(1);
 }
 
-const bot = new Telegraf(process.env.TELEGRAM_BOT_TOKEN);
-const ai = new GoogleGenAI({ apiKey: process.env.API_KEY });
+const bot = new Telegraf(telegramBotToken);
+const ai = new GoogleGenAI({ apiKey: apiKey });
 const model = 'gemini-2.5-flash';
 
 // This is the core "personality" of your bot.
@@ -40,7 +42,7 @@ RULES:
 // This runs when a user first starts a chat with the bot.
 bot.start((ctx) => {
   ctx.replyWithMarkdown(
-    `Hello ${ctx.from.first_name}! ??\n\nI'm here to listen. This is a safe and anonymous space for you to vent or confess anything on your mind. Just send me a message.\n\n*Disclaimer:* I am an AI bot and not a replacement for a mental health professional. If you are in crisis, please seek professional help immediately.\n\nType /resources to see a list of helpful organizations.`
+    `Hello ${ctx.from.first_name}! ðŸ‘‹\n\nI'm here to listen. This is a safe and anonymous space for you to vent or confess anything on your mind. Just send me a message.\n\n*Disclaimer:* I am an AI bot and not a replacement for a mental health professional. If you are in crisis, please seek professional help immediately.\n\nType /resources to see a list of helpful organizations.`
   );
 });
 
@@ -48,9 +50,9 @@ bot.start((ctx) => {
 bot.command('resources', (ctx) => {
     ctx.replyWithMarkdown(
         `*Here are some helpful resources:*\n\n` +
-        `• *Crisis Text Line:* Text HOME to 741741 (US/Canada) or 85258 (UK)\n` +
-        `• *988 Suicide & Crisis Lifeline:* Call or text 988 (US/Canada)\n` +
-        `• *The Trevor Project (for LGBTQ youth):* 1-866-488-7386\n\n` +
+        `â€¢ *Crisis Text Line:* Text HOME to 741741 (US/Canada) or 85258 (UK)\n` +
+        `â€¢ *988 Suicide & Crisis Lifeline:* Call or text 988 (US/Canada)\n` +
+        `â€¢ *The Trevor Project (for LGBTQ youth):* 1-866-488-7386\n\n` +
         `Remember, reaching out for help is a sign of strength.`
     );
 });
@@ -92,5 +94,5 @@ bot.launch().then(() => {
 });
 
 // These lines help the bot shut down gracefully if the server is stopped.
-(process as any).once('SIGINT', () => bot.stop('SIGINT'));
-(process as any).once('SIGTERM', () => bot.stop('SIGTERM'));
+process.once('SIGINT', () => bot.stop('SIGINT'));
+process.once('SIGTERM', () => bot.stop('SIGTERM'));
