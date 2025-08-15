@@ -1,14 +1,3 @@
-/// <reference types="node" />
-
-declare global {
-  namespace NodeJS {
-    interface Process {
-      exit(code?: number): never;
-      once(event: string | symbol, listener: (...args: any[]) => void): this;
-    }
-  }
-}
-
 /**
  * @license
  * SPDX-License-Identifier: Apache-2.0
@@ -27,11 +16,11 @@ const apiKey = process.env.API_KEY;
 
 if (!telegramBotToken) {
   console.error("ERROR: TELEGRAM_BOT_TOKEN is not defined in your environment variables.");
-  process.exit(1);
+  (process as any).exit(1);
 }
 if (!apiKey) {
   console.error("ERROR: API_KEY is not defined in your environment variables.");
-  process.exit(1);
+  (process as any).exit(1);
 }
 
 const bot = new Telegraf(telegramBotToken);
@@ -105,5 +94,5 @@ bot.launch().then(() => {
 });
 
 // These lines help the bot shut down gracefully if the server is stopped.
-process.once('SIGINT', () => bot.stop('SIGINT'));
-process.once('SIGTERM', () => bot.stop('SIGTERM'));
+(process as any).once('SIGINT', () => bot.stop('SIGINT'));
+(process as any).once('SIGTERM', () => bot.stop('SIGTERM'));
