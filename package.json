@@ -5,10 +5,10 @@
   "main": "index.tsx",
   "type": "module",
   "scripts": {
-    "start": "ts-node index.tsx"
+    "start": "node --loader ts-node/esm index.tsx"
   },
   "dependencies": {
-    "@google/genai": "^0.7.0",
+    "@google/genai": "^1.14.0",
     "telegraf": "^4.16.3",
     "dotenv": "^16.4.5",
     "ts-node": "^10.9.2",
