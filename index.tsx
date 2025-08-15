@@ -1,5 +1,14 @@
 /// <reference types="node" />
 
+declare global {
+  namespace NodeJS {
+    interface Process {
+      exit(code?: number): never;
+      once(event: string | symbol, listener: (...args: any[]) => void): this;
+    }
+  }
+}
+
 /**
  * @license
  * SPDX-License-Identifier: Apache-2.0
